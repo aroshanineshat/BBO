@@ -3,19 +3,20 @@
 #include <iostream>
 #include <random>
 #include <cmath>
+#include <vector>
 
 std::vector<float> Cost_Function(std::vector<std::vector<float>>, int, int);
 void Data_Sort(std::vector<std::vector<float>>&, std::vector<float>&, int);
 
-int main (int argc, char* argv[])
+int main ()
 {
 
-    const int GenerationLimit=40;
+    const int GenerationLimit=2500;
     const int PopulationSize=20;
     const int PopulationDimention=50;
     const float MutationProbability=0.04;
     const int NumberOfElites=2;
-    std::cout<< "1";
+    std::cout.flush();
     std::vector<float> Minimum_Range;
     std::vector<float> Maximum_Range;
     std::vector<float> Minimum_Cost;
@@ -25,7 +26,6 @@ int main (int argc, char* argv[])
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::cout << "stating";
     std::vector<std::vector<float>> x;
 
     for (int i =0; i< PopulationSize; i++)
@@ -44,7 +44,7 @@ int main (int argc, char* argv[])
     std::vector<float> Cost=Cost_Function(x, PopulationSize, PopulationDimention);
     Data_Sort(x, Cost, PopulationSize);
     Minimum_Cost.push_back(Cost[0]);
-    std::cout<<"Generation 0 minimum cost: " << Minimum_Cost[0];
+    std::cout<<"Generation 0 minimum cost: " << Minimum_Cost[0] << std::endl;
 
     std::vector<std::vector<float>> z;
     std::array<float, PopulationSize> mu;
@@ -59,7 +59,7 @@ int main (int argc, char* argv[])
         lambda[i]=1-mu[i];
     }
 
-    for (int crnt_generation=0; crnt_generation<GenerationLimit; crnt_generation++)
+    for (int crnt_generation=1; crnt_generation<GenerationLimit; crnt_generation++)
     {
         EliteSolutions.clear();
         EliteCosts.clear();
@@ -90,7 +90,7 @@ int main (int argc, char* argv[])
                     z_temp.push_back(x[k][j]);
                 }
             }
-
+            z.push_back(z_temp);
         }
         
         for (int k =0; k < PopulationSize; k++)
@@ -124,8 +124,9 @@ int main (int argc, char* argv[])
 
         Data_Sort(x, Cost, PopulationSize);
         Minimum_Range.push_back(Cost[0]);
-        std::cout << "Generation " << crnt_generation << " min cost= "<< Cost[0];
+        std::cout << "Generation " << crnt_generation << " min cost= "<< Cost[0] << std::endl;
     }
+    return 0;
 }
 
 std::vector<float> Cost_Function(std::vector<std::vector<float>> initial_m, int Population_Size, int Population_Dimention){
