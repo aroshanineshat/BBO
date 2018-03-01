@@ -5,6 +5,8 @@
 #include <cmath>
 #include <vector>
 
+//Dengging
+
 std::vector<float> Cost_Function(std::vector<std::vector<float>>, int, int);
 void Data_Sort(std::vector<std::vector<float>>&, std::vector<float>&, int);
 
