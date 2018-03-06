@@ -13,18 +13,18 @@ void Data_Sort(std::vector<std::vector<float>>&, std::vector<float>&, int);
 int main ()
 {
 
-    const int GenerationLimit=2500;
-    const int PopulationSize=20;
+    const int GenerationLimit=25000;
+    const int PopulationSize=200;
     const int PopulationDimention=50;
-    const float MutationProbability=0.04;
+    const float MutationProbability=0.004;
     const int NumberOfElites=2;
     std::cout.flush();
     std::vector<float> Minimum_Range;
     std::vector<float> Maximum_Range;
     std::vector<float> Minimum_Cost;
 
-    Minimum_Range.push_back(-2.048);
-    Maximum_Range.push_back(+2.048);
+    Minimum_Range.push_back(-2.048f);
+    Maximum_Range.push_back(+2.048f);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -37,7 +37,7 @@ int main ()
         {
            float value;
            std::uniform_real_distribution<> disp(Minimum_Range[0], Maximum_Range[0]);
-           value = disp(gen);
+           value = static_cast<float>(disp(gen));
            temp_row.push_back(value);
         }
         x.push_back(temp_row);
@@ -49,8 +49,8 @@ int main ()
     std::cout<<"Generation 0 minimum cost: " << Minimum_Cost[0] << std::endl;
 
     std::vector<std::vector<float>> z;
-    std::array<float, PopulationSize> mu;
-    std::array<float, PopulationSize> lambda;
+    std::array<float, PopulationSize> mu ={0};
+    std::array<float, PopulationSize> lambda = {0};
     float mu_sum =0;
     std::vector<std::vector<float>> EliteSolutions;
     std::vector<float> EliteCosts;
@@ -79,7 +79,7 @@ int main ()
                 if (migration_rate(gen) < lambda[k])
                 {
                     std::uniform_real_distribution<> randomnm(0,1);
-                    float random_a = randomnm(gen) * mu_sum;
+                    float random_a = static_cast<float>(randomnm(gen)) * mu_sum;
                     float select = mu[0];
                     int select_ind=0;
                     while((random_a > select) && (select_ind < PopulationSize))
@@ -104,7 +104,7 @@ int main ()
                 {
                     float value2;
                     std::uniform_real_distribution<> m_temp(Minimum_Range[0], Maximum_Range[0]);
-                    value2 = m_temp(gen);
+                    value2 = static_cast<float>(m_temp(gen));
                     z[k][p] = value2; 
                 }
             }
@@ -120,13 +120,14 @@ int main ()
 
         for (int l =0; l < NumberOfElites; l++)
         {
-            x[PopulationSize-l+1] = EliteSolutions[l];
-            Cost[PopulationSize-l+1] = EliteCosts[l];
+            x[PopulationSize-l-1] = EliteSolutions[l];
+            Cost[PopulationSize-l-1] = EliteCosts[l];
         }
 
         Data_Sort(x, Cost, PopulationSize);
         Minimum_Cost.push_back(Cost[0]);
-        std::cout << "Generation " << crnt_generation << " min cost= "<< Cost[0] << std::endl;
+        if (crnt_generation % 100 == 0)
+            std::cout << "Generation " << crnt_generation << " min cost= "<< Cost[0] << std::endl;
     }
     return 0;
 }
