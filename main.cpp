@@ -56,7 +56,7 @@ int main ()
     std::vector<float> EliteCosts;
     for (int i=0; i < PopulationSize; i++)
     {
-        mu[i]=(PopulationSize-i)/(PopulationSize+1);
+        mu[i]=((float)PopulationSize-(float)i)/((float)PopulationSize+1.0f);
         mu_sum=mu_sum+mu[i];
         lambda[i]=1-mu[i];
     }
@@ -125,7 +125,7 @@ int main ()
         }
 
         Data_Sort(x, Cost, PopulationSize);
-        Minimum_Range.push_back(Cost[0]);
+        Minimum_Cost.push_back(Cost[0]);
         std::cout << "Generation " << crnt_generation << " min cost= "<< Cost[0] << std::endl;
     }
     return 0;
